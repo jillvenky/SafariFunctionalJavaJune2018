@@ -4,8 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-interface StudentCriterion {
+//interface Blah {
+//  void blah();
+//}
+@FunctionalInterface
+interface StudentCriterion /*extends Blah*/ {
   boolean test(Student s);
+//  void blah();
+}
+
+@FunctionalInterface
+interface Odd {
+  boolean banana(Student s);
 }
 
 public class School {
@@ -56,6 +66,12 @@ public class School {
     showAll(roster);
 //    showAll(getSmartStudents(roster, 3.5F));
     showAll(getStudentsByCriterion(roster, Student.getSmartCriterion()));
-    showAll(getStudentsByCriterion(roster, new Student.EnthusiasmCriterion()));
+    showAll(getStudentsByCriterion(roster, Student.getEnthusiasmCriterion()));
+    showAll(getStudentsByCriterion(roster, s -> s.getName().charAt(0) <= 'M'));
+
+//    StudentCriterion sc = s -> s.getName().charAt(0) <= 'M';
+//    boolean b = (sc).test(roster.get(0));
+//    boolean b = ((Odd)(s -> s.getName().charAt(0) <= 'M'))
+//        .banana(roster.get(0));
   }
 }

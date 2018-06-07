@@ -51,10 +51,7 @@ public final class Student {
     return smartCriterion;
   }
 
-  private static final StudentCriterion smartCriterion =
-    (Student s) -> {
-      return s.grade > 3.0;
-    };
+  private static final StudentCriterion smartCriterion = s -> s.grade > 3.0;
 
 //  private static final StudentCriterion smartCriterion =
 ////      new StudentCriterion() {
@@ -89,10 +86,14 @@ public final class Student {
 //    }
 //  }
 //
-  static class EnthusiasmCriterion implements StudentCriterion {
-    @Override
-    public boolean test(Student s) {
-      return s.courses.size() > 2;
-    }
+  public static StudentCriterion getEnthusiasmCriterion() {
+    return s -> s.courses.size() > 2;
   }
+
+//  static class EnthusiasmCriterion implements StudentCriterion {
+//    @Override
+//    public boolean test(Student s) {
+//      return s.courses.size() > 2;
+//    }
+//  }
 }
