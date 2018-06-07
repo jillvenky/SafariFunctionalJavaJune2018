@@ -7,6 +7,17 @@ import java.util.List;
 @FunctionalInterface
 interface StudentCriterion {
   boolean test(Student s);
+  default StudentCriterion negate() {
+    return s -> !this.test(s);
+  }
+
+  default StudentCriterion and(StudentCriterion second) {
+    return s -> this.test(s) && second.test(s);
+  }
+
+  default StudentCriterion or(StudentCriterion second) {
+    return s -> this.test(s) || second.test(s);
+  }
   static StudentCriterion negate(StudentCriterion crit) {
     return s -> !crit.test(s);
   }
@@ -46,17 +57,19 @@ public class School {
     roster.add(Student.ofNameGradeCourses("Sheila", 3.7F, "Math", "Physics", "Astrophysics"));
     showAll(roster);
     StudentCriterion smartCriterion = Student.getSmartCriterion();
+    StudentCriterion enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
+
     showAll(getStudentsByCriterion(roster, smartCriterion));
     showAll(getStudentsByCriterion(roster, s -> s.getName().charAt(0) <= 'M'));
 
-    StudentCriterion enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
     showAll(getStudentsByCriterion(roster, enthusiasmCriterion));
+
     StudentCriterion unenthusiasticCriterion =
-        StudentCriterion.negate(enthusiasmCriterion);
+        enthusiasmCriterion.negate();
     showAll(getStudentsByCriterion(roster, unenthusiasticCriterion));
 
     StudentCriterion smartButNotEnthusiastic =
-        StudentCriterion.and(smartCriterion, unenthusiasticCriterion);
+        smartCriterion.and(enthusiasmCriterion.negate());
     showAll(getStudentsByCriterion(roster, smartButNotEnthusiastic));
   }
 }
