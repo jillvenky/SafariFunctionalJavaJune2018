@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public final class Student {
   private final String name;
@@ -47,12 +48,12 @@ public final class Student {
         '}';
   }
 
-  private static final Criterion<Student> smartCriterion = s -> s.grade > 3.0;
-  public static Criterion<Student> getSmartCriterion() {
+  private static final Predicate<Student> smartCriterion = s -> s.grade > 3.0;
+  public static Predicate<Student> getSmartCriterion() {
     return smartCriterion;
   }
 
-  public static Criterion<Student> getEnthusiasmCriterion(final int threshold) {
+  public static Predicate<Student> getEnthusiasmCriterion(final int threshold) {
 //    threshold += 1;
     return s -> s.courses.size() > threshold;
   }

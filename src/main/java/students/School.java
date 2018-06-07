@@ -2,11 +2,13 @@ package students;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class School {
   public static <E> List<E> getByCriterion(
-      Iterable<E> ls, Criterion<E> criterion) {
+      Iterable<E> ls, Predicate<E> criterion) {
     List<E> out = new ArrayList<>();
     for (E s : ls) {
       if (criterion.test(s)) {
@@ -29,23 +31,27 @@ public class School {
     roster.add(Student.ofNameGradeCourses("Jim", 2.7F, "Art"));
     roster.add(Student.ofNameGradeCourses("Sheila", 3.7F, "Math", "Physics", "Astrophysics"));
     showAll(roster);
-    Criterion<Student> smartCriterion = Student.getSmartCriterion();
-    Criterion<Student> enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
+    Predicate<Student> smartCriterion = Student.getSmartCriterion();
+    Predicate<Student> enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
 
     showAll(getByCriterion(roster, smartCriterion));
     showAll(getByCriterion(roster, s -> s.getName().charAt(0) <= 'M'));
 
     showAll(getByCriterion(roster, enthusiasmCriterion));
 
-    Criterion<Student> unenthusiasticCriterion =
+    Predicate<Student> unenthusiasticCriterion =
         enthusiasmCriterion.negate();
     showAll(getByCriterion(roster, unenthusiasticCriterion));
 
-    Criterion<Student> smartButNotEnthusiastic =
+    Predicate<Student> smartButNotEnthusiastic =
         smartCriterion.and(enthusiasmCriterion.negate());
     showAll(getByCriterion(roster, smartButNotEnthusiastic));
 
     List<String> names = Arrays.asList("Fred", "Jim", "Sheila", "William");
     showAll(getByCriterion(names, s -> s.length() > 4));
+
+    showAll(roster);
+    roster.sort((s1, s2) -> Float.compare(s1.getGrade(), s2.getGrade()));
+    showAll(roster);
   }
 }
