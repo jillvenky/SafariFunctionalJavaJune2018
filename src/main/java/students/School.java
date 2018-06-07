@@ -14,6 +14,14 @@ public class School {
     return s -> !crit.test(s);
   }
 
+  public static StudentCriterion and(StudentCriterion first, StudentCriterion second) {
+    return s -> first.test(s) && second.test(s);
+  }
+
+  public static StudentCriterion or(StudentCriterion first, StudentCriterion second) {
+    return s -> first.test(s) || second.test(s);
+  }
+
   public static List<Student> getStudentsByCriterion(
       Iterable<Student> ls, StudentCriterion criterion) {
     List<Student> out = new ArrayList<>();
@@ -38,12 +46,16 @@ public class School {
     roster.add(Student.ofNameGradeCourses("Jim", 2.7F, "Art"));
     roster.add(Student.ofNameGradeCourses("Sheila", 3.7F, "Math", "Physics", "Astrophysics"));
     showAll(roster);
-    showAll(getStudentsByCriterion(roster, Student.getSmartCriterion()));
+    StudentCriterion smartCriterion = Student.getSmartCriterion();
+    showAll(getStudentsByCriterion(roster, smartCriterion));
     showAll(getStudentsByCriterion(roster, s -> s.getName().charAt(0) <= 'M'));
 
     StudentCriterion enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
     showAll(getStudentsByCriterion(roster, enthusiasmCriterion));
     StudentCriterion unenthusiasticCriterion = negate(enthusiasmCriterion);
     showAll(getStudentsByCriterion(roster, unenthusiasticCriterion));
+
+    StudentCriterion smartButNotEnthusiastic = and(smartCriterion, unenthusiasticCriterion);
+    showAll(getStudentsByCriterion(roster, smartButNotEnthusiastic));
   }
 }
