@@ -1,41 +1,14 @@
 package students;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
-@FunctionalInterface
-interface StudentCriterion {
-  boolean test(Student s);
-  default StudentCriterion negate() {
-    return s -> !this.test(s);
-  }
-
-  default StudentCriterion and(StudentCriterion second) {
-    return s -> this.test(s) && second.test(s);
-  }
-
-  default StudentCriterion or(StudentCriterion second) {
-    return s -> this.test(s) || second.test(s);
-  }
-  static StudentCriterion negate(StudentCriterion crit) {
-    return s -> !crit.test(s);
-  }
-
-  static StudentCriterion and(StudentCriterion first, StudentCriterion second) {
-    return s -> first.test(s) && second.test(s);
-  }
-
-  static StudentCriterion or(StudentCriterion first, StudentCriterion second) {
-    return s -> first.test(s) || second.test(s);
-  }
-}
-
 public class School {
-  public static List<Student> getStudentsByCriterion(
-      Iterable<Student> ls, StudentCriterion criterion) {
-    List<Student> out = new ArrayList<>();
-    for (Student s : ls) {
+  public static <E> List<E> getByCriterion(
+      Iterable<E> ls, Criterion<E> criterion) {
+    List<E> out = new ArrayList<>();
+    for (E s : ls) {
       if (criterion.test(s)) {
         out.add(s);
       }
@@ -43,8 +16,8 @@ public class School {
     return out;
   }
 
-  public static void showAll(Iterable<Student> ls) {
-    for (Student s : ls) {
+  public static <E> void showAll(Iterable<E> ls) {
+    for (E s : ls) {
       System.out.println("> " + s);
     }
     System.out.println("------------------------------");
@@ -56,20 +29,23 @@ public class School {
     roster.add(Student.ofNameGradeCourses("Jim", 2.7F, "Art"));
     roster.add(Student.ofNameGradeCourses("Sheila", 3.7F, "Math", "Physics", "Astrophysics"));
     showAll(roster);
-    StudentCriterion smartCriterion = Student.getSmartCriterion();
-    StudentCriterion enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
+    Criterion<Student> smartCriterion = Student.getSmartCriterion();
+    Criterion<Student> enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
 
-    showAll(getStudentsByCriterion(roster, smartCriterion));
-    showAll(getStudentsByCriterion(roster, s -> s.getName().charAt(0) <= 'M'));
+    showAll(getByCriterion(roster, smartCriterion));
+    showAll(getByCriterion(roster, s -> s.getName().charAt(0) <= 'M'));
 
-    showAll(getStudentsByCriterion(roster, enthusiasmCriterion));
+    showAll(getByCriterion(roster, enthusiasmCriterion));
 
-    StudentCriterion unenthusiasticCriterion =
+    Criterion<Student> unenthusiasticCriterion =
         enthusiasmCriterion.negate();
-    showAll(getStudentsByCriterion(roster, unenthusiasticCriterion));
+    showAll(getByCriterion(roster, unenthusiasticCriterion));
 
-    StudentCriterion smartButNotEnthusiastic =
+    Criterion<Student> smartButNotEnthusiastic =
         smartCriterion.and(enthusiasmCriterion.negate());
-    showAll(getStudentsByCriterion(roster, smartButNotEnthusiastic));
+    showAll(getByCriterion(roster, smartButNotEnthusiastic));
+
+    List<String> names = Arrays.asList("Fred", "Jim", "Sheila", "William");
+    showAll(getByCriterion(names, s -> s.length() > 4));
   }
 }

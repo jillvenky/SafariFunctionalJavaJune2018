@@ -47,12 +47,12 @@ public final class Student {
         '}';
   }
 
-  private static final StudentCriterion smartCriterion = s -> s.grade > 3.0;
-  public static StudentCriterion getSmartCriterion() {
+  private static final Criterion<Student> smartCriterion = s -> s.grade > 3.0;
+  public static Criterion<Student> getSmartCriterion() {
     return smartCriterion;
   }
 
-  public static StudentCriterion getEnthusiasmCriterion(final int threshold) {
+  public static Criterion<Student> getEnthusiasmCriterion(final int threshold) {
 //    threshold += 1;
     return s -> s.courses.size() > threshold;
   }
