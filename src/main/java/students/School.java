@@ -4,21 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//interface Blah {
-//  void blah();
-//}
 @FunctionalInterface
-interface StudentCriterion /*extends Blah*/ {
+interface StudentCriterion {
   boolean test(Student s);
-//  void blah();
-}
-
-@FunctionalInterface
-interface Odd {
-  boolean banana(Student s);
 }
 
 public class School {
+  public static StudentCriterion negate(StudentCriterion crit) {
+    return s -> !crit.test(s);
+  }
+
   public static List<Student> getStudentsByCriterion(
       Iterable<Student> ls, StudentCriterion criterion) {
     List<Student> out = new ArrayList<>();
@@ -30,27 +25,6 @@ public class School {
     return out;
   }
 
-//  public static List<Student> getSmartStudents(Iterable<Student> ls, float threshold) {
-//    List<Student> out = new ArrayList<>();
-//    for (Student s : ls) {
-//      if (s.getGrade() > threshold) {
-//        out.add(s);
-//      }
-//    }
-//    return out;
-//  }
-//
-//  public static List<Student> getEnthusiasticStudents(
-//      Iterable<Student> ls, int threshold) {
-//    List<Student> out = new ArrayList<>();
-//    for (Student s : ls) {
-//      if (s.getCourses().size() > threshold) {
-//        out.add(s);
-//      }
-//    }
-//    return out;
-//  }
-//
   public static void showAll(Iterable<Student> ls) {
     for (Student s : ls) {
       System.out.println("> " + s);
@@ -64,14 +38,12 @@ public class School {
     roster.add(Student.ofNameGradeCourses("Jim", 2.7F, "Art"));
     roster.add(Student.ofNameGradeCourses("Sheila", 3.7F, "Math", "Physics", "Astrophysics"));
     showAll(roster);
-//    showAll(getSmartStudents(roster, 3.5F));
     showAll(getStudentsByCriterion(roster, Student.getSmartCriterion()));
-    showAll(getStudentsByCriterion(roster, Student.getEnthusiasmCriterion()));
     showAll(getStudentsByCriterion(roster, s -> s.getName().charAt(0) <= 'M'));
 
-//    StudentCriterion sc = s -> s.getName().charAt(0) <= 'M';
-//    boolean b = (sc).test(roster.get(0));
-//    boolean b = ((Odd)(s -> s.getName().charAt(0) <= 'M'))
-//        .banana(roster.get(0));
+    StudentCriterion enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
+    showAll(getStudentsByCriterion(roster, enthusiasmCriterion));
+    StudentCriterion unenthusiasticCriterion = negate(enthusiasmCriterion);
+    showAll(getStudentsByCriterion(roster, unenthusiasticCriterion));
   }
 }
