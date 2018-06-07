@@ -7,21 +7,20 @@ import java.util.List;
 @FunctionalInterface
 interface StudentCriterion {
   boolean test(Student s);
-}
-
-public class School {
-  public static StudentCriterion negate(StudentCriterion crit) {
+  static StudentCriterion negate(StudentCriterion crit) {
     return s -> !crit.test(s);
   }
 
-  public static StudentCriterion and(StudentCriterion first, StudentCriterion second) {
+  static StudentCriterion and(StudentCriterion first, StudentCriterion second) {
     return s -> first.test(s) && second.test(s);
   }
 
-  public static StudentCriterion or(StudentCriterion first, StudentCriterion second) {
+  static StudentCriterion or(StudentCriterion first, StudentCriterion second) {
     return s -> first.test(s) || second.test(s);
   }
+}
 
+public class School {
   public static List<Student> getStudentsByCriterion(
       Iterable<Student> ls, StudentCriterion criterion) {
     List<Student> out = new ArrayList<>();
@@ -52,10 +51,12 @@ public class School {
 
     StudentCriterion enthusiasmCriterion = Student.getEnthusiasmCriterion(2);
     showAll(getStudentsByCriterion(roster, enthusiasmCriterion));
-    StudentCriterion unenthusiasticCriterion = negate(enthusiasmCriterion);
+    StudentCriterion unenthusiasticCriterion =
+        StudentCriterion.negate(enthusiasmCriterion);
     showAll(getStudentsByCriterion(roster, unenthusiasticCriterion));
 
-    StudentCriterion smartButNotEnthusiastic = and(smartCriterion, unenthusiasticCriterion);
+    StudentCriterion smartButNotEnthusiastic =
+        StudentCriterion.and(smartCriterion, unenthusiasticCriterion);
     showAll(getStudentsByCriterion(roster, smartButNotEnthusiastic));
   }
 }
