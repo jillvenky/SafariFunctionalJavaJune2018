@@ -47,18 +47,51 @@ public final class Student {
         '}';
   }
 
-  static class SmartCriterion implements StudentCriterion {
-    @Override
-    public boolean test(Student s) {
-//      return s.getGrade() > 3.0;
-      return s.grade > 3.0;
-    }
+  public static StudentCriterion getSmartCriterion() {
+    return smartCriterion;
   }
 
+  private static final StudentCriterion smartCriterion =
+    (Student s) -> {
+      return s.grade > 3.0;
+    };
+
+//  private static final StudentCriterion smartCriterion =
+////      new StudentCriterion() {
+////    @Override
+//    /*public boolean test*/(Student s) -> {
+//      return s.grade > 3.0;
+//    }
+////  }
+//  ;
+
+//  private static final StudentCriterion smartCriterion =
+//      new StudentCriterion() { // anonymous inner class instantiation
+//    @Override
+//    public boolean test(Student s) {
+//      return s.grade > 3.0;
+//    }
+//  };
+//
+//  private static final StudentCriterion smartCriterion = new /*SmartCriterion();*/
+//  /*private static class SmartCriterion implements */StudentCriterion() {
+//    @Override
+//    public boolean test(Student s) {
+//      return s.grade > 3.0;
+//    }
+//  };
+//
+//  private static final SmartCriterion smartCriterion = new SmartCriterion();
+//  private static class SmartCriterion implements StudentCriterion {
+//    @Override
+//    public boolean test(Student s) {
+//      return s.grade > 3.0;
+//    }
+//  }
+//
   static class EnthusiasmCriterion implements StudentCriterion {
     @Override
     public boolean test(Student s) {
-//      return s.getCourses().size() > 2;
       return s.courses.size() > 2;
     }
   }

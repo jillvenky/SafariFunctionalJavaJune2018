@@ -55,7 +55,7 @@ public class School {
     roster.add(Student.ofNameGradeCourses("Sheila", 3.7F, "Math", "Physics", "Astrophysics"));
     showAll(roster);
 //    showAll(getSmartStudents(roster, 3.5F));
-    showAll(getStudentsByCriterion(roster, new Student.SmartCriterion()));
+    showAll(getStudentsByCriterion(roster, Student.getSmartCriterion()));
     showAll(getStudentsByCriterion(roster, new Student.EnthusiasmCriterion()));
   }
 }
