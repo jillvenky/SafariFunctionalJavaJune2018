@@ -37,12 +37,19 @@ public class Averager {
         .parallel()
 //        .unordered() // generate is already unordered
         .limit(8_000_000)
+//        .map(x -> Math.sin(x))
+        .map(Math::sin)
+//        .map(x -> Math.asin(x))
+        .map(Math::asin)
         .map(x -> Math.sin(x))
-        .map(x -> Math.asin(x))
-        .map(x -> Math.sin(x))
-        .collect(() -> new Average(),
-            (b, i) -> b.include(i),
-            (bf, bi) -> bf.merge(bi))
+        .collect(
+//            () -> new Average(),
+            Average::new,
+//            (b, i) -> b.include(i),
+            Average::include,
+//            (bf, bi) -> bf.merge(bi)
+            Average::merge
+        )
         .get()
         .ifPresent(a -> System.out.println("Average is " + a));
     long totalTime = System.nanoTime() - start;
